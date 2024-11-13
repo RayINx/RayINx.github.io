@@ -26,7 +26,7 @@ body {
   }
   
   /* Sections */
-  .summary, .stats, .skills, .experience, .equipment {
+  .edu, .workexp, .skills, .projects {
     margin-bottom: 20px;
   }
   
@@ -36,27 +36,27 @@ body {
     padding-bottom: 5px;
   }
   
-  /* Stats */
-  .stats ul {
+  /* My work experience */
+  .workexp ul {
     list-style-type: none;
     padding: 0;
   }
   
-  .stats li {
+  .workexp li {
     font-weight: bold;
   }
   
-  /* Experience */
-  .experience .job {
+  /* Skills */
+  .skills .job {
     margin-bottom: 15px;
   }
   
-  .experience h3 {
+  .skills h3 {
     margin: 0;
     font-size: 1.2em;
   }
   
-  .experience p {
+  .skills p {
     margin: 5px 0;
   }
   
