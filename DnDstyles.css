@@ -1,0 +1,65 @@
+/* Base styles */
+body {
+    font-family: 'Garamond', serif;
+    background-color: #f4f1e0;
+    color: #333;
+    margin: 0;
+    padding: 0;
+  }
+  
+  header, .footer {
+    background-color: #a6804d;
+    color: white;
+    text-align: center;
+    padding: 15px;
+  }
+  
+  /* Resume container */
+  .resume-container {
+    width: 60%;
+    margin: 0 auto;
+    padding: 20px;
+    background-color: #fff;
+    border: 1px solid #a6804d;
+    box-shadow: 0 0 10px rgba(0,0,0,0.1);
+    border-radius: 8px;
+  }
+  
+  /* Sections */
+  .summary, .stats, .skills, .experience, .equipment {
+    margin-bottom: 20px;
+  }
+  
+  h2 {
+    color: #a6804d;
+    border-bottom: 2px solid #a6804d;
+    padding-bottom: 5px;
+  }
+  
+  /* Stats */
+  .stats ul {
+    list-style-type: none;
+    padding: 0;
+  }
+  
+  .stats li {
+    font-weight: bold;
+  }
+  
+  /* Experience */
+  .experience .job {
+    margin-bottom: 15px;
+  }
+  
+  .experience h3 {
+    margin: 0;
+    font-size: 1.2em;
+  }
+  
+  .experience p {
+    margin: 5px 0;
+  }
+  
+  .footer {
+    margin-top: 20px;
+  }
