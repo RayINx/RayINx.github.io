@@ -38,12 +38,9 @@ body {
   
   /* My work experience */
   .workexp ul {
-    list-style-type: none;
-    padding: 0;
-  }
-  
-  .workexp li {
-    font-weight: bold;
+    list-style-type: disc; /* Sets bullet points */
+    padding-left: 20px;    /* Adds indentation for bullets */
+    margin-top: 0;
   }
   
   /* Skills */
