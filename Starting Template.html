@@ -1,0 +1,120 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <title>React Page Layout</title>
+    <script src="https://unpkg.com/react@18/umd/react.development.js"></script>
+    <script src="https://unpkg.com/react-dom@18/umd/react-dom.development.js"></script>
+    <script src="https://unpkg.com/@babel/standalone/babel.min.js"></script>
+
+    <style>
+      /* Basic Layout Styles */
+      body, html {
+        margin: 0;
+        padding: 0;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        font-family: Arial, sans-serif;
+        background-color: #fff;
+      }
+
+      /* Main container styling */
+      .container {
+        display: flex;
+        flex-direction: column;
+        gap: 10px;
+        padding: 20px;
+        box-sizing: border-box;
+      }
+
+      /* Header and Footer Styling */
+      .header, .footer {
+        background-color: #500000; /* Texas State Maroon */
+        color: white;
+        padding: 20px;
+        text-align: center;
+        font-size: 1.5em; /* Increase font size */
+        border-radius: 8px; /* Rounds corners slightly for a cleaner look */
+      }
+
+      /* Content area styling */
+      .content {
+        display: flex;
+        flex: 1;
+        gap: 10px; /* Space between left and right columns */
+      }
+
+      /* Left and Right Column Styling */
+      .left-column, .right-column {
+        flex: 1;
+        padding: 20px;
+        background-color: #FFD700; /* Texas State Gold */
+        font-size: 1.2em; /* Increase font size */
+        border-radius: 8px;
+        border: 1px solid #ddd;
+      }
+    </style>
+  </head>
+  <body>
+    <div id="root"></div>
+
+    <script type="text/babel">
+      // Header Component
+      function Header() {
+        return (
+          <div className="header">
+            <h1>Header</h1>
+          </div>
+        );
+      }
+
+      // Left Column Component
+      function LeftColumn() {
+        return (
+          <div className="left-column">
+            <h2>Left Column</h2>
+            <p>This is the left column content.</p>
+          </div>
+        );
+      }
+
+      // Right Column Component
+      function RightColumn() {
+        return (
+          <div className="right-column">
+            <h2>Right Column</h2>
+            <p>This is the right column content.</p>
+          </div>
+        );
+      }
+
+      // Footer Component
+      function Footer() {
+        return (
+          <div className="footer">
+            <p>Footer</p>
+          </div>
+        );
+      }
+
+      // Main App Component with Header, Content (Left/Right), and Footer
+      function App() {
+        return (
+          <div className="container">
+            <Header />
+            <div className="content">
+              <LeftColumn />
+              <RightColumn />
+            </div>
+            <Footer />
+          </div>
+        );
+      }
+
+      // Render the App Component
+      const root = ReactDOM.createRoot(document.getElementById('root'));
+      root.render(<App />);
+    </script>
+  </body>
+</html>
