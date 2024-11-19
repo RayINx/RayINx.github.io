@@ -1,0 +1,168 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>React Page Layout</title>
+    <script src="https://unpkg.com/react@18/umd/react.development.js"></script>
+    <script src="https://unpkg.com/react-dom@18/umd/react-dom.development.js"></script>
+    <script src="https://unpkg.com/@babel/standalone/babel.min.js"></script>
+
+    <style>
+      .App {
+        text-align: center;
+        font-family: Arial, sans-serif;
+      }
+
+      .content {
+        display: flex;
+        padding: 10px;
+        justify-content: space-between;
+      }
+
+      .panel {
+        height: 300px;
+        border: 3px solid black;
+        box-sizing: border-box;
+        margin: 10px;
+        padding: 10px;
+      }
+
+      .header-panel {
+        height: 100px;
+        text-align: center;
+      }
+
+      .footer-panel {
+        text-align: center;
+        height: 100px;
+      }
+
+      .left-panel {
+        width: 50%;
+        margin-left: 0px;
+    }   
+
+    .right-panel {
+        width: 50%;
+        margin-right: 0;
+    }
+    .time {
+        font-size: 125px;
+        font-style: bold;
+    }
+
+    </style>
+  </head>
+  <body>
+    <div id="root"></div>
+
+    <script type="text/babel">
+// Empty functions for the header and the footer in 2 seperate function components
+      function Header() {
+        return (
+          <header className="panel header-panel">
+            <h1>Heading the Head</h1>
+          </header>
+        );
+      }
+      function Footer() {
+        return (
+          <div className="panel footer-panel">
+            <h1>Footer foot foot</h1>
+          </div>
+        );
+      }
+
+// LeftPanel Class component that updates button onClick
+      class LeftPanel extends React.Component {
+        constructor(props) {
+          super(props); // Unsure why this is needed but it made things work
+          this.state = { clickCount: 0 };
+        }
+
+        handleClick = () => {
+          this.setState((prevState) => ({
+            clickCount: prevState.clickCount + 1,
+          }));
+        };
+
+        render() {
+          return (
+            <div className="panel left-panel">
+              <h2>Click button to update number</h2>
+              <p>Clicks: {this.state.clickCount}</p>
+              <button onClick={this.handleClick}>Click Here!</button>
+            </div>
+          );
+        }
+      }
+
+// RightPanel Class Component that updates real time 
+//Gotten from w3schools version html https://www.w3schools.com/js/tryit.asp?filename=tryjs_timing_clock
+      class RightPanel extends React.Component {
+        constructor(props) {
+            super(props);
+            this.state = {
+            currentTime: "", // Initialize empty string
+            };
+        }
+
+        componentDidMount() {
+            this.startTime(); // Start time
+        }
+
+        componentWillUnmount() {
+            clearTimeout(this.timerID); // Clear?
+        }
+
+        startTime = () => {
+            const today = new Date();
+            let h = today.getHours();
+            let m = today.getMinutes();
+            let s = today.getSeconds();
+            m = this.checkTime(m);
+            s = this.checkTime(s);
+            const timeString = `${h}:${m}:${s}`; // Convert into string
+            this.setState({ currentTime: timeString }); 
+            this.timerID = setTimeout(this.startTime, 1000); //??
+        };
+
+        checkTime = (i) => {
+            return i < 10 ? `0${i}` : i; // add zero in front of numbers < 10
+            // (if i < 10)
+            //      i = 0 + i
+            // return i
+        };
+
+        render() {
+            return (
+            <div className="panel right-panel">
+                <h2>Current Time</h2>
+                <div className="time">{this.state.currentTime}</div>
+            </div>
+            );
+        }
+        }
+
+/********************************************************************************/
+      // Main App Component to place everything correctly
+      function App() {
+        return (
+          <div className="App">
+            <Header />
+            <div className="content">
+              <LeftPanel />
+              <RightPanel />
+            </div>
+            <Footer />
+          </div>
+        );
+      }
+
+      // Render the App Component
+      const root = ReactDOM.createRoot(document.getElementById("root"));
+      root.render(<App />);
+    </script>
+  </body>
+</html>
