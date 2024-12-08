@@ -1,0 +1,252 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Raymond's Library</title>
+    <link rel="stylesheet" href="styleSheet_capS.css">
+    <script src="https://unpkg.com/react@18/umd/react.development.js"></script>
+    <script src="https://unpkg.com/react-dom@18/umd/react-dom.development.js"></script>
+    <script src="https://unpkg.com/@babel/standalone/babel.min.js"></script>
+
+  </head>
+  <body>
+  <div id="root"></div>
+  <script type="text/babel">
+
+// Empty functions for the header and the footer in 2 seperate components
+    function Header() {
+      return (
+        <header className="panel header-panel">
+          <h1>Welcome to Raymond's Library</h1>
+        </header>
+      );
+    }
+    function Footer() {
+      return (
+        <div className="panel footer-panel">
+          <p>Credit for all this goes to Rick King and his class of CS3320. 
+            With his amazing teaching, I was able to create a full MERN stack 
+            web application and have been inspired into looking to host a 
+            similar version for a web portfolio</p>
+        </div>
+      );
+    }
+
+  // LeftPanel Class component that updates books available 
+    class LeftPanel extends React.Component {
+    constructor(props) {
+      super(props);
+      this.state = { hoveredBookId: null }; // Track the hovered book ID
+    }
+
+    hoverBook = (bookId) => {
+      this.setState({ hoveredBookId: bookId });
+    };
+
+    leaveBook = () => {
+      this.setState({ hoveredBookId: null }); // Reset when hover ends
+    };
+
+    checkoutBook = async (book) => {
+      if (!book) return;
+      try {
+        const response = await fetch(`http://localhost:3000/books/${book._id}`, {
+          method: "PUT",
+          headers: { "Content-Type": "application/json" },
+          body: JSON.stringify({ avail: false }), // Update avail to false
+        });
+
+        if (response.ok) {
+          alert(`${book.title} has been checked out.`);
+          this.props.fetchBooks(); // Refresh the book list
+          this.setState({ hoveredBookId: null }); // Reset hover
+        } else {
+          alert("Failed to checkout the book.");
+        }
+      } catch (error) {
+        console.error("Error checking out the book:", error);
+      }
+    };
+
+  moreInfoBook = (book) => {
+    alert(`More info about selected book goes here`);
+    // TODO
+  };
+
+  render() {
+    const { books } = this.props;
+    const { hoveredBookId } = this.state;
+
+    return (
+      <div className="panel left-panel">
+        <h2>Check out a book</h2>
+        <ul id="bookList" className="book-list">
+          {books.map((book) => (
+            <li
+              key={book._id}
+              className="book-item"
+              onMouseEnter={() => this.hoverBook(book._id)}
+              onMouseLeave={this.leaveBook}
+            >
+              {hoveredBookId === book._id ? (
+                <div>
+                  <button
+                    className="checkout-button"
+                    onClick={() => this.checkoutBook(book)}
+                  >
+                    Checkout
+                  </button>
+                  <button
+                    className="moreInfo-button"
+                    onClick={() => this.moreInfoBook(book)}
+                  >
+                    More Info
+                  </button>
+                </div>
+              ) : (
+                <div>
+                  <strong>{book.title}</strong>
+                  <br />
+                  <span>{book.author}</span>
+                </div>
+              )}
+            </li>
+          ))}
+        </ul>
+      </div>
+    );
+  }
+}
+
+  // RightPanel Class Component to check in/out a book
+class RightPanel extends React.Component {
+  constructor(props) {
+      super(props);
+      this.state = { hoveredBookId: null }; // Track the hovered book ID
+    }
+
+    hoverBook = (bookId) => {
+      this.setState({ hoveredBookId: bookId });
+    };
+
+    leaveBook = () => {
+      this.setState({ hoveredBookId: null }); // Reset when hover ends
+    };
+
+    checkinBook = async (book) => {
+      if (!book) return;
+      try {
+        const response = await fetch(`http://localhost:3000/books/${book._id}`, {
+          method: "PUT",
+          headers: { "Content-Type": "application/json" },
+          body: JSON.stringify({ avail: true }), // Update avail to true
+        });
+
+        if (response.ok) {
+          alert(`${book.title} has been checked in.`);
+          this.props.fetchBooks(); // Refresh the book list
+          this.setState({ hoveredBookId: null }); // Reset hover
+        } else {
+          alert("Failed to checkin the book.");
+        }
+      } catch (error) {
+        console.error("Error checking in the book:", error);
+      }
+    };
+
+  moreInfoBook = (book) => {
+    alert(`More info about selected book goes here`);
+    // TODO
+  };
+
+  render() {
+    const { books } = this.props;
+    const { hoveredBookId } = this.state;
+
+    return (
+      <div className="panel left-panel">
+        <h2>Check in a book</h2>
+        <ul id="bookList" className="book-list">
+          {books.map((book) => (
+            <li
+              key={book._id}
+              className="book-item"
+              onMouseEnter={() => this.hoverBook(book._id)}
+              onMouseLeave={this.leaveBook}
+            >
+              {hoveredBookId === book._id ? (
+                <div>
+                  <button
+                    className="checkin-button"
+                    onClick={() => this.checkinBook(book)}
+                  >
+                    Checkin
+                  </button>
+                  <button
+                    className="moreInfo-button"
+                    onClick={() => this.moreInfoBook(book)}
+                  >
+                    More Info
+                  </button>
+                </div>
+              ) : (
+                <div>
+                  <strong>{book.title}</strong>
+                  <br />
+                  <span>{book.author}</span>
+                </div>
+              )}
+            </li>
+          ))}
+        </ul>
+      </div>
+    );
+  }
+}
+
+/******************************************************************************/
+  // Main App Component to place everything correctly
+    function App() {
+    // Define states for available and unavailable books
+    const [availableBooks, setAvailableBooks] = React.useState([]);
+    const [unavailableBooks, setUnavailableBooks] = React.useState([]);
+
+    const fetchBooks = async () => {
+        try {
+            // Fetch available books
+            const availableResponse = await fetch("http://localhost:3000/books/available");
+            const availableBooks = await availableResponse.json();
+            setAvailableBooks(availableBooks);
+
+            // Fetch unavailable books
+            const unavailableResponse = await fetch("http://localhost:3000/books/unavailable");
+            const unavailableBooks = await unavailableResponse.json();
+            setUnavailableBooks(unavailableBooks);
+        } catch (error) {
+            console.error("Error fetching books:", error);
+        }
+    };
+
+    React.useEffect(() => {
+        fetchBooks();
+    }, []);
+
+    return (
+        <div className="App">
+            <Header />
+            <div className="content">
+                <LeftPanel fetchBooks={fetchBooks} books={availableBooks} />
+                <RightPanel fetchBooks={fetchBooks} books={unavailableBooks} />
+            </div>
+            <Footer />
+        </div>
+    );
+  }
+
+      // Render the App Component
+      const root = ReactDOM.createRoot(document.getElementById("root"));
+      root.render(<App />);
+    </script>
+  </body>
+</html>
